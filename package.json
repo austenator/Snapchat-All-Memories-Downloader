@@ -1,0 +1,31 @@
+{
+  "name": "snapchat-memory-downloader",
+  "version": "1.0.0",
+  "description": "Assists downloading Snapchat memories with original timestamps.",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/austenator/Snapchat-All-Memories-Downloader.git"
+  },
+  "keywords": [
+    "snapchat",
+    "memory",
+    "memories",
+    "timestamp",
+    "lastmodified",
+    "date",
+    "time"
+  ],
+  "author": "Austen Henry",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/austenator/Snapchat-All-Memories-Downloader/issues"
+  },
+  "homepage": "https://github.com/austenator/Snapchat-All-Memories-Downloader#readme",
+  "dependencies": {
+    "@ronomon/utimes": "^2.3.1"
+  }
+}

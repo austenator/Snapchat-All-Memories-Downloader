@@ -1,8 +1,10 @@
-// IMPORTS (no external packages needed)
+// IMPORTS
 const https = require('https');
 const fs = require('fs');
+const path = require('path');
 const Queue = require("./concurrency.js")
 const Progress = require("./progress.js")
+const TimestampHelper = require('./timestamp_helper.js');
 
 // CONFIG
 const dir = "Downloads";
@@ -29,6 +31,7 @@ function main() {
 
         let [url, body] = downloads[i]["Download Link"].split('?', 2);
         let fileName = getFileName(downloads[i]);
+        const timestamp = TimestampHelper.getTimestampFromDownload(downloads[i]);
 
         // First get CDN download link
         queue.enqueue(() => getDownloadLink(url, body, fileName))
@@ -38,6 +41,7 @@ function main() {
                 // Download the file
                 queue.enqueue(() => downloadMemory(result[0], result[1]))
                     .then((success) => {
+                        TimestampHelper.updateTimestamp(path.join('.', dir, result[1]), timestamp);
                         progress.downloadSucceeded(true);
                     })
                     .catch((err) => {
@@ -62,7 +66,7 @@ function getFileName(download) {
     else if (download["Media Type"] == "VIDEO")
         filename += ".mp4";
 
-    return filename
+    return filename;
 }
 
 const getDownloadLink = (url, body, filename) => new Promise(resolve => {
@@ -102,8 +106,8 @@ const getDownloadLink = (url, body, filename) => new Promise(resolve => {
 
 const downloadMemory = (downloadUrl, filename) => new Promise(resolve => {
 
-    // Create the file and write to it
-    var file = fs.createWriteStream(dir + "/" + filename);
+    // Create the file and write to it.
+    var file = fs.createWriteStream(path.join('.', dir, filename));
 
     const request = https.get(downloadUrl, function (res) {
         res.pipe(file);
